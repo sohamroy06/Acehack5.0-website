@@ -4,44 +4,156 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ACEHACK 5.0 - Deployment</title>
-    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+    <!-- Abstract Military-Minecraft Background Image -->
+<div id="bg-image"></div>
+    <!-- ====================== BACKGROUND MUSIC ====================== -->
+  <!-- Reliable test audio sources (SoundHelix + MDN sample) -->
+<audio id="bg-music" autoplay muted loop preload="auto">
+    <source src="assets/bg_music/music.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+
+
+    <div id="music-toggle" title="Toggle background music">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="var(--terminal-green)">
+        <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+        </svg>
+    </div>
+
+    <style>
+        #music-toggle{
+            position:fixed;bottom:20px;right:20px;
+            cursor:pointer;z-index:99999;opacity:0.6;
+            transition:opacity .3s,transform .2s;
+        }
+        #music-toggle:hover{opacity:1;transform:scale(1.1);}
+        #music-toggle.muted svg path{fill:#ff5555;}
+    </style>
+
+    <!-- ====================== YOUR PAGE CONTENT ====================== -->
+    <canvas id="scene-3d"></canvas>
+
+    <!-- Mouse Trail Canvas -->
+    <canvas id="trail-canvas"></canvas>
+
+    <!-- Hexagonal Grid Overlay -->
+    <div class="hex-grid"></div>
+
+    <!-- Boot Sequence -->
     <div id="boot-sequence">
         <div class="boot-text-line">INITIATING COMMAND.EXE...</div>
         <div class="boot-text-line" id="status-line"></div>
         <div class="pixel-spinner"></div>
     </div>
-    <div class="main-wrapper container" id="main-content">
-        <div class="header">
-            <div class="css-logo">
-                <span class="logo-text">ACEHACK 5.0</span>
-            </div>
-        </div>
 
-        <div class="content">
-            <h1 class="coming-soon-heading" data-text="BATTLE INITIATION">BATTLE INITIATION</h1>
-            <p class="tagline">The Digital Battlefront Awaits.</p>
+    <!-- Main Content -->
+    <div id="main-content">
+        <div class="container">
+            <!-- Retro Corner Brackets -->
+            <div class="retro-corner top-left"></div>
+            <div class="retro-corner top-right"></div>
+            <div class="retro-corner bottom-left"></div>
+            <div class="retro-corner bottom-right"></div>
             
-            <div class="data-stream-container">
-                <div class="data-stream-bar">
-                    <div class="running-soldier"></div> 
+            <!-- Retro Badge -->
+            <div class="retro-badge">v5.0</div>
+            
+            <div class="header">
+                <div class="css-logo">
+                    <span class="logo-text">ACEHACK 5.0</span>
                 </div>
             </div>
-        </div>
 
-        <div class="footer">
-            <p>&copy; 2023 ACEHACK 5.0. All Rights Reserved.</p>
-            <div class="social-links">
-                <a href="#" target="_blank">FACEBOOK</a>
-                <a href="#" target="_blank">TWITTER</a>
-                <a href="#" target="_blank">INSTAGRAM</a>
+            <div class="pixel-divider"></div>
+
+            <div class="content">
+                <div class="heading-wrapper">
+                    <h1 class="coming-soon-heading">BATTLE INITIATION</h1>
+                    <h1 class="year-2026">2026</h1>
+                </div>
+                <p class="tagline">The Digital Battlefront Awaits.</p>
+                
+                <div class="data-stream-container">
+                    <div class="data-stream-bar">
+                        <div class="minecraft-steve">
+                            <div class="steve-hair"></div>
+                            <div class="steve-head">
+                                <div class="steve-face">
+                                    <div class="steve-eye"></div>
+                                    <div class="steve-eye"></div>
+                                    <div class="steve-mouth"></div>
+                                </div>
+                            </div>
+                            <div class="steve-body"></div>
+                            <div class="steve-arm steve-arm-left"></div>
+                            <div class="steve-arm steve-arm-right"></div>
+                            <div class="steve-leg steve-leg-left"></div>
+                            <div class="steve-leg steve-leg-right"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer">
+                <p>&copy; 2025 ACEHACK 5.0. All Rights Reserved.</p>
+                <div class="social-links">
+                    <a href="#" target="_blank">FACEBOOK</a>
+                    <a href="#" target="_blank">TWITTER</a>
+                    <a href="#" target="_blank">INSTAGRAM</a>
+                </div>
             </div>
         </div>
     </div>
 
     <script src="script.js"></script>
+
+    <!-- Background-music controller -->
+     <script>
+        (function(){
+        const audio  = document.getElementById('bg-music');
+        const toggle = document.getElementById('music-toggle');
+
+        // Start muted for autoplay policy
+        audio.volume = 0.16;
+        audio.muted = false;
+        audio.play().catch(()=>{});
+
+        // Fade in after first user click/touch
+        function unlock(){
+            audio.muted = false;
+            let targetVol = 0.2;
+            let step = 0.02;
+            let fade = setInterval(() => {
+                if (audio.volume < targetVol)
+                    audio.volume = Math.min(audio.volume + step, targetVol);
+                else clearInterval(fade);
+            }, 100);
+
+            document.removeEventListener('click', unlock);
+            document.removeEventListener('touchstart', unlock);
+        }
+
+        document.addEventListener('click', unlock);
+        document.addEventListener('touchstart', unlock);
+
+        // Toggle button
+        toggle.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+                toggle.classList.remove('muted');
+            } else {
+                audio.pause();
+                toggle.classList.add('muted');
+            }
+        });
+    })();
+
+  </script>
 </body>
 </html>
