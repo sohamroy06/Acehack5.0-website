@@ -1,4 +1,3 @@
-// ================= BOOT SEQUENCE =================
 document.addEventListener('DOMContentLoaded', () => {
     const statusLine = document.getElementById('status-line');
     const bootSequence = document.getElementById('boot-sequence');
@@ -8,8 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
         "EXECUTING DEPLOYMENT PROTOCOL v5.0",
         "VERIFYING SECURITY CREDENTIALS... [OK]",
         "ALLOCATING 64MB HEAP FOR COMMAND CORE",
-        "LOADING MAP ASSETS: 'PIXEL-BATTLEFIELD'...",
-        "COMPILING TACTICAL DATA...",
+        "LOADING MAP ASSETS: 'PIXEL-WORLD'...",
+        "COMPILING PIXELATED DATA...",
         "STATUS: BOOT COMPLETE. AWAITING USER COMMAND."
     ];
 
@@ -46,7 +45,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(typeMessage, 100);
 });
 
-// ================= 3D BACKGROUND =================
 const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
 const scene = new THREE.Scene();
@@ -69,7 +67,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 
 const particleCount = isMobile ? 90 : 200;
 const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-const colors = [0x6B8E23, 0xFF9933, 0xBDB76B];
+const colors = [0x2ecc71, 0xe74c3c, 0x95a5a6];
 const particles = [];
 
 for (let i = 0; i < particleCount; i++) {
@@ -113,7 +111,6 @@ function animate3D() {
 
 animate3D();
 
-// ================= RESIZE (THROTTLED) =================
 let resizeTimeout;
 window.addEventListener('resize', () => {
     clearTimeout(resizeTimeout);
@@ -128,7 +125,6 @@ window.addEventListener('resize', () => {
     }, 150);
 });
 
-// ================= TRAIL EFFECT =================
 const trailCanvas = document.getElementById('trail-canvas');
 const trailCtx = trailCanvas.getContext('2d');
 
@@ -161,10 +157,46 @@ function animateTrail() {
         }
         trailCtx.beginPath();
         trailCtx.arc(p.x, p.y, 3 * p.life, 0, Math.PI * 2);
-        trailCtx.fillStyle = `rgba(0,255,0,${p.life * 0.5})`;
+        trailCtx.fillStyle = `rgba(46,204,113,${p.life * 0.5})`;
         trailCtx.fill();
     }
     requestAnimationFrame(animateTrail);
 }
 
 animateTrail();
+
+(function(){
+    const audio  = document.getElementById('bg-music');
+    const toggle = document.getElementById('music-toggle');
+
+    audio.volume = 0.16;
+    audio.muted = false;
+    audio.play().catch(()=>{});
+
+    function unlock(){
+        audio.muted = false;
+        let targetVol = 0.2;
+        let step = 0.02;
+        let fade = setInterval(() => {
+            if (audio.volume < targetVol)
+                audio.volume = Math.min(audio.volume + step, targetVol);
+            else clearInterval(fade);
+        }, 100);
+
+        document.removeEventListener('click', unlock);
+        document.removeEventListener('touchstart', unlock);
+    }
+
+    document.addEventListener('click', unlock);
+    document.addEventListener('touchstart', unlock);
+
+    toggle.addEventListener('click', () => {
+        if (audio.paused) {
+            audio.play();
+            toggle.classList.remove('muted');
+        } else {
+            audio.pause();
+            toggle.classList.add('muted');
+        }
+    });
+})();
