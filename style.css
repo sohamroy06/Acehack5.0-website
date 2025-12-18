@@ -1265,3 +1265,88 @@
         .footer {
             text-align: center;
         }
+        /* ============================= */
+/* WhatsApp Community CTA */
+/* ============================= */
+
+
+/* ============================= */
+/* WhatsApp Community CTA */
+/* ============================= */
+
+.whatsapp-cta {
+    margin-top: 55px;
+    text-align: center;
+    width: 100%;
+}
+
+.whatsapp-cta a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 65%;                 /* ⬅ reduced further */
+    max-width: 580px;
+
+    font-size: 0.9em;           /* ⬅ slightly smaller text */
+    padding: 15px 28px;         /* ⬅ tighter height */
+
+    color: var(--terminal-green);
+    text-decoration: none;
+    font-family: var(--pixel-font);
+
+    border: 3px solid var(--terminal-green);
+    border-radius: 8px;
+
+    background: linear-gradient(
+        180deg,
+        rgba(46, 204, 113, 0.15),
+        rgba(46, 204, 113, 0.06)
+    );
+
+    box-shadow:
+        0 0 18px rgba(46, 204, 113, 0.45),
+        inset 0 0 12px rgba(0, 0, 0, 0.75);
+
+    transition: all 0.25s ease;
+}
+
+.whatsapp-cta a:hover {
+    background: linear-gradient(
+        180deg,
+        rgba(46, 204, 113, 0.24),
+        rgba(46, 204, 113, 0.1)
+    );
+
+    box-shadow:
+        0 0 28px rgba(46, 204, 113, 0.7),
+        inset 0 0 16px rgba(0, 0, 0, 0.8);
+
+    transform: translateY(-2px);
+}
+
+/* ⬅ SUBTEXT MADE CLEARLY MORE READABLE */
+.whatsapp-cta p {
+    margin-top: 14px;
+    font-size: 0.9em;           /* ⬅ increased */
+    color: var(--khaki);
+    font-family: var(--mono-font);
+    opacity: 0.95;
+}
+
+/* Mobile tuning */
+@media (max-width: 768px) {
+    .whatsapp-cta {
+        margin-top: 40px;
+    }
+
+    .whatsapp-cta a {
+        width: 85%;
+        font-size: 0.8em;
+        padding: 14px 22px;
+    }
+
+    .whatsapp-cta p {
+        font-size: 0.85em;
+    }
+}
